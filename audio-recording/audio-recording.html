@@ -1,10 +1,107 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Audio Recording</title>
 </head>
 <body>
+<h1>Audio Recording</h1>
 
+<!--start recording-->
+<button id="recordButton">Record</button>
+
+<!--stop recording-->
+<button id="stopButton" disabled>Stop</button>
+
+<!--Liste mit aufgenommenen Audio-Dateien-->
+<ol id="recordingsList"></ol>
+
+<!--Script kann in js-Datei ausgelagert werden-->
+<script src="./js/recorder.js"></script>
+<script>
+    var Stream; //stream von getUserMedia()
+    var rec; //Recorder.js object
+    var input; //MediaStreamAudioSourceNode welche aufgenommen wird
+    var audioContext = new AudioContext; //new audio context to help us record
+
+    //Referenz zu den Buttons
+    var recordButton = document.getElementById("recordButton");
+    var stopButton = document.getElementById("stopButton");
+    //Events für die Buttons
+    recordButton.addEventListener("click", startRecording);
+    stopButton.addEventListener("click", stopRecording);
+
+
+    function startRecording() {
+
+        var constraints = {
+            audio: true,
+            video: false
+        }
+        //Record Button ist disabled, bis User das Mikrophone erlaubt hat (success von getUserMedia()
+        recordButton.disabled = true;
+        stopButton.disabled = false;
+
+        //getUserMedia Info:
+        // https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia
+        //kurz: Fordert User auf, Erlaubnis für die Verwendung von Medien zu geben (hier Audio) -> MediaStream wird erzeugt
+        navigator.mediaDevices.getUserMedia(constraints).then(function(stream) {
+            //bei Erfolg wird der stream genutzt
+
+            console.log("getUserMedia() success, stream created, initializing Recorder.js ...");
+            /* assign to gumStream for later use */
+            Stream = stream;
+            /* use the stream */
+            input = audioContext.createMediaStreamSource(stream);
+            /* Create the Recorder object and configure to record mono sound (1 channel) Recording 2 channels will double the file size */
+            rec = new Recorder(input, {
+                numChannels: 1
+            })
+            //start the recording process
+            rec.record()
+            console.log("Recording started");
+        }).catch(function(err) {
+            console.log(err);
+            //behandelt den Fehler
+
+            //enabled Record Button und disabled Stop Button
+            recordButton.disabled = false;
+            stopButton.disabled = true;
+        });
+    }
+
+    function stopRecording() {
+        console.log("stopButton clicked");
+
+        //disable Stop button, enable Record um neue Aufnahmen zu ermöglichen
+        stopButton.disabled = true;
+        recordButton.disabled = false;
+
+        //stoppt Aufnahmevorgang
+        rec.stop(); //stop microphone access
+        Stream.getAudioTracks()[0].stop();
+        //erstellt einen wav "blob" and und gibt es an createDownloadLink
+        rec.exportWAV(createDownloadLink);
+    }
+
+    function createDownloadLink(blob) {
+        var url = URL.createObjectURL(blob);
+        var au = document.createElement('audio');
+        var li = document.createElement('li');
+        var link = document.createElement('a');
+        //Controls für <audio> Element
+        au.controls = true;
+        au.src = url;
+        //verlinkt das a element zum "blob"
+        link.href = url;
+        link.download = new Date().toISOString() + '.wav';
+        link.innerHTML = link.download;
+        //fügt die neue Audio und das a element zum li element
+        li.appendChild(au);
+        li.appendChild(link);
+        //fügt li element zu Liste hinzu
+        recordingsList.appendChild(li);
+    }
+</script>
 </body>
 </html>
