@@ -2,9 +2,59 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Audio Slider</title>
+
+    <link rel="stylesheet" href="./revealjs/css/reveal.css">
+    <link rel="stylesheet" href="./revealjs/css/theme/black.css">
 </head>
 <body>
+<div class="reveal">
+    <div class="slides">
+        <section data-audio-text="Herzlich willkommen in unserem Restaurant!">
 
+            <h1 class="center">Herzlich Willkommen!</h1>
+            <p>Welcome!</p>
+
+        </section>
+        <section data-state="start" data-audio-text="Wir freuen uns Sie begrüßen zu dürfen und bitten Sie das Abstandsgebot einzuhalten.">
+
+            <h1 class="center">Willkommen</h1>
+            <p>Wir freuen uns Sie begrüßen zu dürfen und bitten Sie das Abstandsgebot einzuhalten.</p>
+
+        </section>
+    </div>
+</div>
+
+<script src="./revealjs/js/reveal.js"></script>
+<!--kann in ein eigenes Skript ausgelagert werden:-->
+<script>
+    Reveal.initialize({
+
+        //Settings für revealjs:
+        //z. B.: Loop an/aus, Controls an/aus, autoSlide, ...
+        //Doku siehe https://revealjs.com/#/
+
+        //Settings für audio-slider:
+        //Doku siehe: https://github.com/rajgoel/reveal.js-plugins/tree/master/audio-slideshow
+        dependencies: [
+            //	audio-Slideshow Plugins
+            { src: './revealjs/plugin/audio-slideshow/audio-slideshow.js', condition: function( ) { return !!document.body.classList; } }
+        ],
+
+        audio: {
+            //in [KEY] den eigenen Key von http://www.voicerss.org/default.aspx einsetzen (350 daily requests für Text to Speech kostenlos)
+            textToSpeechURL: "http://api.voicerss.org/?key=[KEY]=de-de&c=ogg&src=",  // the URL to the text to speech converter
+            autoplay: true,	// automatically start slideshow
+        },
+    });
+
+    //wird ausgelöst, wenn eine gewisse Folie erreicht wird.
+    Reveal.addEventListener( 'start', function() {
+
+        //Action wenn Folie erreicht wird...
+        console.log( 'Folie erreicht, Event ausgelöst' );
+
+    } );
+</script>
 </body>
 </html>
