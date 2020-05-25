@@ -2,9 +2,53 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Soundmeter</title>
 </head>
 <body>
 
+<meter id="volume" high="0.25" max="1" value="0" style="width: 500px; height: 25px"></meter>
+
+<script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
+<script src="./js/soundmeter.js"></script>
+<script>
+    //Referenz zum HTML-Anzeige-Element
+    var volume = document.getElementById("volume");
+
+    //Einschränkung: nur Audioaufnahme
+    var constraints = {
+        audio: true,
+        video: false
+    }
+
+    //Erstellt ein AudioContext Objekt
+    var audioContext = new AudioContext();
+
+    navigator.mediaDevices.getUserMedia(constraints)
+        .then(function (stream) {
+            /* use the stream */
+
+            //Soundmeter Objekt
+            var soundMeter = new SoundMeter(audioContext);
+
+            //stream und Callback Funktion wird weitergegeben
+            soundMeter.connectToSource(stream, function (e) {
+                if (e) {
+                    //im Falle eines Fehlers, wird dieser in e ausgegeben
+                    alert(e);
+                    return;
+                }
+                //alle 200 Millisekunden wird das HMTL-Element mit dem gemessenen Schall aktualisiert
+                //soundMeter.instant wird hier mit 30 multipliziert, damit ein Ausschlag sichtbar ist
+                //der Wert 30 könnte durch eine Variable ersetzt werden, damit Einstellungen vom User möglich sind, um die Ausgabe an die Empfindlichkeit des jeweiligen Mikrofones anzupassen
+                setInterval(() => {
+                    volume.value = soundMeter.instant * 30;
+                }, 200);
+            })
+        })
+        .catch(function (err) {
+            /* handle the error */
+            console.log(err.message, err.name);
+        });
+</script>
 </body>
 </html>
