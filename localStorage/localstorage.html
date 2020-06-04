@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>localStorage</title>
+
+    <!--    bootstrap 4 CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+          integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <style>
+        form {
+            max-width: 700px;
+            margin: 20px auto 20px auto
+        }
+    </style>
+</head>
+<body>
+
+<form>
+    <div class="form-group">
+        <label for="vorname">Vorname</label>
+        <input class="form-control" id="vorname" name="vorname" type="text">
+    </div>
+    <div class="form-group">
+        <label for="nachname">Nachname</label>
+        <input class="form-control" id="nachname" name="nachname" type="text">
+    </div>
+    <button class="btn btn-primary" onclick="speichern()">Speichern</button>
+</form>
+
+<script>
+    //Referenz zu den Input-Feldern
+    var vorname = document.getElementById("vorname");
+    var nachname = document.getElementById("nachname");
+
+    //wird die Seite geladen
+    window.onload = function () {
+        //Werte aus dem localStorage werden in die Inputfelder geschrieben
+        vorname.value = localStorage.getItem("vorname");
+        nachname.value = localStorage.getItem("nachname");
+    }
+
+    function speichern() {
+        //Werte werden nach Button-Klick in dem localStorage gespeichert
+        localStorage.setItem("vorname", vorname.value);
+        localStorage.setItem("nachname", nachname.value);
+    }
+</script>
+</body>
+</html>
