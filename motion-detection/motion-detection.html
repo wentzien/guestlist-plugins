@@ -64,8 +64,8 @@
     }
 
     //Aufruf bei Fehler während Initialisierung
-    function initError() {
-        alert('Something went wrong.');
+    function initError(err) {
+        alert(err.message);
     }
 
     //Aufruf, wenn ein aufgenommenes Bild durch den stream (von getUserMedia in der DiffCamEngine) ausgewertet wurde
