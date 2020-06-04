@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <title>Audio Slider</title>
 
-    <link rel="stylesheet" href="./revealjs/css/reveal.css">
-    <link rel="stylesheet" href="./revealjs/css/theme/black.css">
+    <link rel="stylesheet" href="./reveal.js/css/reveal.css">
+    <link rel="stylesheet" href="./reveal.js/css/theme/black.css">
 </head>
 <body>
 <div class="reveal">
@@ -28,7 +28,8 @@
     </div>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.9.2/js/reveal.js"></script>
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.9.2/js/reveal.js"></script>-->
+<script src="./reveal.js/js/reveal.js"></script>
 <!--kann in ein eigenes Skript ausgelagert werden:-->
 <script>
     Reveal.initialize({
@@ -41,7 +42,7 @@
         //Doku siehe: https://github.com/rajgoel/reveal.js-plugins/tree/master/audio-slideshow
         dependencies: [
             //	audio-Slideshow Plugins
-            { src: './revealjs/plugin/audio-slideshow/audio-slideshow.js', condition: function( ) { return !!document.body.classList; } }
+            { src: './reveal.js/plugin/audio-slideshow/audio-slideshow.js', condition: function( ) { return !!document.body.classList; } }
         ],
 
         audio: {
